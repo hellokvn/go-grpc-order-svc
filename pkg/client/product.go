@@ -13,8 +13,6 @@ type ProductServiceClient struct {
 }
 
 func InitProductServiceClient() ProductServiceClient {
-	fmt.Println("Product Service Client")
-
 	cc, err := grpc.Dial("localhost:50052", grpc.WithInsecure())
 
 	if err != nil {
@@ -28,7 +26,7 @@ func InitProductServiceClient() ProductServiceClient {
 	return c
 }
 
-func (c *ProductServiceClient) FindOne(productId int32) (*pb.FindOneResponse, error) {
+func (c *ProductServiceClient) FindOne(productId int64) (*pb.FindOneResponse, error) {
 	req := &pb.FindOneRequest{
 		Id: productId,
 	}
@@ -36,7 +34,7 @@ func (c *ProductServiceClient) FindOne(productId int32) (*pb.FindOneResponse, er
 	return c.Client.FindOne(context.Background(), req)
 }
 
-func (c *ProductServiceClient) DecreaseStock(productId int32, orderId int32) (*pb.DecreaseStockResponse, error) {
+func (c *ProductServiceClient) DecreaseStock(productId int64, orderId int64) (*pb.DecreaseStockResponse, error) {
 	req := &pb.DecreaseStockRequest{
 		Id:      productId,
 		OrderId: orderId,
