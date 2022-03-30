@@ -12,8 +12,8 @@ type ProductServiceClient struct {
 	Client pb.ProductServiceClient
 }
 
-func InitProductServiceClient() ProductServiceClient {
-	cc, err := grpc.Dial("localhost:50052", grpc.WithInsecure())
+func InitProductServiceClient(url string) ProductServiceClient {
+	cc, err := grpc.Dial(url, grpc.WithInsecure())
 
 	if err != nil {
 		fmt.Println("Could not connect:", err)

@@ -6,6 +6,7 @@ import (
 	"net"
 
 	"github.com/hellokvn/go-grpc-order-svc/pkg/client"
+	"github.com/hellokvn/go-grpc-order-svc/pkg/config"
 	"github.com/hellokvn/go-grpc-order-svc/pkg/db"
 	"github.com/hellokvn/go-grpc-order-svc/pkg/pb"
 	"github.com/hellokvn/go-grpc-order-svc/pkg/service"
@@ -13,17 +14,27 @@ import (
 )
 
 func main() {
-	port := ":50053"
-	h := db.Init("postgres://kevin@localhost:5432/order_svc")
-	productSvc := client.InitProductServiceClient()
+	c, err := config.LoadConfig()
 
-	lis, err := net.Listen("tcp", port)
+	if err != nil {
+		log.Fatalln("Failed at config", err)
+	}
+
+	h := db.Init(c.DBUrl)
+
+	lis, err := net.Listen("tcp", c.Port)
 
 	if err != nil {
 		log.Fatalln("Failed to listing:", err)
 	}
 
-	fmt.Println("Order Svc on", port)
+	productSvc := client.InitProductServiceClient(c.ProductSvcUrl)
+
+	if err != nil {
+		log.Fatalln("Failed to listing:", err)
+	}
+
+	fmt.Println("Order Svc on", c.Port)
 
 	s := service.Server{
 		H:          h,
