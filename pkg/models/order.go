@@ -1,9 +1,6 @@
 package models
 
-import "gorm.io/gorm"
-
 type Order struct {
-	gorm.Model
 	Id        int64 `json:"id" gorm:"primaryKey"`
 	Price     int64 `json:"price"`
 	ProductId int64 `json:"product_id"`
